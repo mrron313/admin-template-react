@@ -1,0 +1,83 @@
+/** Global CSS */
+.flex-div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-div-a {
+  width: 60%;
+}
+
+.flex-div-b {
+  width: 7%;
+}
+
+/** Store List CSS */
+.store-item {
+  background-color: rgb(250, 250, 250);
+  margin: 10px 0px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgb(206, 206, 206);
+}
+
+/** Category CSS */
+.category-card {
+  margin: 20px 15px;
+}
+
+.category-card-div>.flex-div-a {
+  padding: 12px 0px 2px 20px;
+}
+
+.category-card-div>.flex-div-a h4 {
+  font-size: 22px;
+}
+
+.category-card-div>.flex-div-b {
+  font-size: 25px;
+  padding: 7px 0px 0px 0px;
+}
+
+.category-arrow-icon {
+  cursor: pointer;
+  font-size: 25px;
+}
+
+/** Item CSS */
+.item-card {
+  margin: 20px 15px;
+}
+
+.item-card-div>.flex-div-a {
+  padding: 12px 0px 2px 20px;
+}
+
+.item-card-div>.flex-div-b {
+  font-size: 18px;
+  padding: 8px 0px 6px 0px;
+}
+
+.item-name {
+  font-size: 15px !important;
+}
+
+.item-arrow-icon {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/** Price Details CSS */
+.description {
+  margin: 0px 16px;
+  padding: 5px;
+  color: #5e5e5e !important;
+}
+
+.total-price {
+  padding: 5px;
+  color: #099EFF;
+  font-weight: bold;
+  font-size: 15px;
+  margin: 0px 16px;
+}

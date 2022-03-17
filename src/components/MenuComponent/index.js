@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
 import { Container, Row, Accordion, Button, Form } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+
 import { putApiCall } from "Helpers/api";
 
 const options = {
@@ -16,6 +18,14 @@ const options = {
 function MenuComponent(props) {
   const [keyWord, setKeyword] = useState('');
   const [menus, setMenus] = useState([]);
+
+  const history = useHistory();
+
+  const openMenu = (menu_details) => {
+    console.log(menu_details);
+    localStorage.setItem("menu_details", JSON.stringify(menu_details));
+    history.push("/admin/menu");
+  };
 
   useEffect(() => {
     if (props.type !== props.activeTab) return;
@@ -39,36 +49,28 @@ function MenuComponent(props) {
   }, [props.activeTab]);
 
   const renderItems = (data) => {
-    const assignMenu = (menu_draft_id) => {
-      var data = JSON.stringify({
-        'menu_draft_id': menu_draft_id
-      });
+    // const assignMenu = (menu_draft_id) => {
+    //   var data = JSON.stringify({
+    //     'menu_draft_id': menu_draft_id
+    //   });
   
-      var headers = { 
-        'Content-Type': 'application/json'
-      };
+    //   var headers = { 
+    //     'Content-Type': 'application/json'
+    //   };
   
-      putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => console.log('assigned'))
-    }
+    //   putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => console.log('assigned'))
+    // }
 
     if (data.length === 0) return 'No menus found';
 
     return data.map(d => {
-      let colorStatus = options[d.menu_process];
-      let isDisabled = d.menu_process === 'assignable'? false : true;
-
       return (
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>
-            <span>{ d.store_name }</span> 
-            <Button disabled={isDisabled} onClick={() => assignMenu(d.menu_draft_id)} style={{ backgroundColor: `${colorStatus}`, border: 'none', marginLeft: '20px' }}>
-              {d.menu_process}
-            </Button>
-          </Accordion.Header>
-          <Accordion.Body>
-            
-          </Accordion.Body>
-        </Accordion.Item>
+        <div className="store-item flex-div">
+          <span className="flex-div-a">{ d.store_name }</span> 
+          <Button size="sm" className="flex-div-b" onClick={() => openMenu(d)}>
+            Open
+          </Button>
+        </div>
       );
     });
   }
