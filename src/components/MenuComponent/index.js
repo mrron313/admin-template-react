@@ -48,19 +48,7 @@ function MenuComponent(props) {
     putApiCall(url, 'put', headers, data).then((result) => setMenus(result.data))
   }, [props.activeTab]);
 
-  const renderItems = (data) => {
-    // const assignMenu = (menu_draft_id) => {
-    //   var data = JSON.stringify({
-    //     'menu_draft_id': menu_draft_id
-    //   });
-  
-    //   var headers = { 
-    //     'Content-Type': 'application/json'
-    //   };
-  
-    //   putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => console.log('assigned'))
-    // }
-
+  const renderStores = (data) => {
     if (data.length === 0) return 'No menus found';
 
     return data.map(d => {
@@ -97,7 +85,7 @@ function MenuComponent(props) {
         </Row>
       )}
 
-      {renderItems(menus)}
+      {renderStores(menus)}
     </Container>
   );
 }

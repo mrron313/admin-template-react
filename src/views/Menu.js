@@ -178,6 +178,30 @@ function Menu() {
       );
     });
 
+  const approve = (menu_draft_id) => {
+    var data = JSON.stringify({
+      'menu_draft_id': menu_draft_id
+    });
+
+    var headers = { 
+      'Content-Type': 'application/json'
+    };
+
+    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => console.log('assigned'))
+  }
+
+  const assign = (menu_draft_id) => {
+    var data = JSON.stringify({
+      'menu_draft_id': menu_draft_id
+    });
+
+    var headers = { 
+      'Content-Type': 'application/json'
+    };
+
+    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/assign_menu', 'put', headers, data).then((result) => console.log('assigned'))
+  }
+
   return (
     <>
       <Row>
@@ -187,12 +211,12 @@ function Menu() {
               <h5 className="h5">CATEGORIES
                 
                 { menu_details.menu_process === 'assignable'? 
-                  <Button> 
+                  <Button onClick={() => assign(menu_details.menu_draft_id)}> 
                     Assign
                   </Button> : '' }
 
                 { menu_details.menu_process === 'in_review'? 
-                  <Button> 
+                  <Button onClick={() => approve(menu_details.menu_draft_id)}> 
                     Approve
                   </Button> : '' }
 
