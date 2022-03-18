@@ -6,10 +6,19 @@ import {
   Row,
   Col,
   Accordion,
+  Badge
 } from "react-bootstrap";
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import AccordionContext from "react-bootstrap/AccordionContext";
 import { BsFillArrowRightCircleFill, BsFillArrowDownCircleFill, BsChevronRight, BsChevronDown } from "react-icons/bs";
+
+const options = {
+  'complete': 'success',
+  'assigned': 'warning',
+  'in_review': 'info',
+  'assignable': 'secondary',
+  'new': 'primary',
+};
 
 function Menu() {
   let menu_details = localStorage.getItem('menu_details');
@@ -46,7 +55,9 @@ function Menu() {
               </div>
             </div>
             <Accordion.Collapse eventKey={i}>
-              <div> {renderItems(category.items)} </div>
+              <div className='item-card'> 
+                {category.items.length === 0? 'No Items Found' : renderItems(category.items)}  
+              </div>
             </Accordion.Collapse>
           </Card>
         </Accordion>
@@ -76,7 +87,7 @@ function Menu() {
 
       return (
         <Accordion key={i}>
-          <Card className='item-card'>
+          <Card>
             <div className='item-card-div flex-div'>
               <div className='flex-div-a'>
                 <h6 className='item-name'> { item.item_name } </h6>
@@ -91,8 +102,7 @@ function Menu() {
                   <span className="total-price">Price ${ item.item_price }</span>
                 </div>
                 <div className='description'>
-                  {/* {item.item_description} */}
-                  Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.
+                  {item.item_description}
                 </div>
                 {renderOptionGroups(item.option_groups)}
               </div>
@@ -208,15 +218,21 @@ function Menu() {
         <Col md="8" className="mx-auto">
           <Card className="card-user">
             <Card.Header>
-              <h5 className="h5">CATEGORIES
+              <h5 className="h6 flex-div">
+                
+                <span className='flex-div-a'>
+                  CATEGORIES 
+                  <Badge style={{ marginLeft: '5px' }} className='badge rounded-pill' bg={options[menu_details.menu_process]}>{menu_details.menu_process}</Badge> 
+                </span>
+
                 
                 { menu_details.menu_process === 'assignable'? 
-                  <Button onClick={() => assign(menu_details.menu_draft_id)}> 
+                  <Button className='flex-div-b' style={{ width: '8%' }}  variant="light" onClick={() => assign(menu_details.menu_draft_id)}> 
                     Assign
                   </Button> : '' }
 
                 { menu_details.menu_process === 'in_review'? 
-                  <Button onClick={() => approve(menu_details.menu_draft_id)}> 
+                  <Button className='flex-div-b' style={{ width: '9%' }} variant="light" onClick={() => approve(menu_details.menu_draft_id)}> 
                     Approve
                   </Button> : '' }
 
@@ -224,7 +240,7 @@ function Menu() {
             </Card.Header>
             <hr></hr>
             <Card.Body>
-              {renderCategories()}
+              {menu_details.categories.length === 0? 'No Categories Found' : renderCategories()}  
             </Card.Body>
           </Card>
         </Col>
