@@ -1,4 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
+import toast from 'react-hot-toast';
 
 import {
   Button,
@@ -11,6 +14,8 @@ import {
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import AccordionContext from "react-bootstrap/AccordionContext";
 import { BsFillArrowRightCircleFill, BsFillArrowDownCircleFill, BsChevronRight, BsChevronDown } from "react-icons/bs";
+import CustomToast from '../components/Notification/CustomToast';
+import { putApiCall } from 'Helpers/api';
 
 const options = {
   'complete': 'success',
@@ -21,10 +26,11 @@ const options = {
 };
 
 function Menu() {
+  const history = useHistory();
+  const [isLoading, setLoading] = useState(null);
+
   let menu_details = localStorage.getItem('menu_details');
   menu_details = JSON.parse(menu_details);
-
-  const [isLoading, setLoading] = useState(false);
 
   let renderCategories = () => 
     menu_details.categories.map((category, i) => {
@@ -202,8 +208,11 @@ function Menu() {
 
     putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => {
       setLoading(false);
-      
-    })
+      toast.success('The menu is approved');
+      setTimeout(() => {
+        history.push('/admin/menus');
+      }, 2000);
+    });
   }
 
   const assign = (menu_draft_id) => {
@@ -218,11 +227,16 @@ function Menu() {
 
     putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/assign_menu', 'put', headers, data).then((result) => {
       setLoading(false);
+      toast.success('The menu is assigned');
+      setTimeout(() => {
+        history.push('/admin/menus');
+      }, 2000);
     });
   }
 
   return (
     <>
+      <CustomToast />
       <Row>
         <Col md="8" className="mx-auto">
           <Card className="card-user">
@@ -235,15 +249,14 @@ function Menu() {
                 </span>
                 
                 { menu_details.menu_process === 'assignable'? 
-                  <Button disabled={isLoading} className='flex-div-b' style={{ width: '8%' }}  variant="light" onClick={() => assign(menu_details.menu_draft_id)}> 
-                    {isLoading ? 'Loading…' : 'Assign'}
+                  <Button disabled={isLoading !== null} className='flex-div-b' style={{ width: '10%' }}  variant="light" onClick={() => assign(menu_details.menu_draft_id)}> 
+                    {isLoading === null? 'Assign' : 'Loading'}
                   </Button> : '' }
 
                 { menu_details.menu_process === 'in_review'? 
-                  <Button disabled={isLoading} className='flex-div-b' style={{ width: '9%' }} variant="light" onClick={() => approve(menu_details.menu_draft_id)}> 
-                    {isLoading ? 'Loading…' : 'Approve'}
+                  <Button disabled={isLoading !== null} className='flex-div-b' style={{ width: '10%' }} variant="light" onClick={() => approve(menu_details.menu_draft_id)}> 
+                    {isLoading === null? 'Approve' : 'Loading'}
                   </Button> : '' }
-
               </h5>
             </Card.Header>
             <hr></hr>

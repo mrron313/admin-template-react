@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
 import { Container, Row, Badge, Button, Form, Spinner } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 import { putApiCall } from "Helpers/api";
 
