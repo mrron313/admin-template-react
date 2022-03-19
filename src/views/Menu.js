@@ -24,6 +24,8 @@ function Menu() {
   let menu_details = localStorage.getItem('menu_details');
   menu_details = JSON.parse(menu_details);
 
+  const [isLoading, setLoading] = useState(false);
+
   let renderCategories = () => 
     menu_details.categories.map((category, i) => {
       function CustomToggle({ children, eventKey, callback }) {
@@ -189,6 +191,7 @@ function Menu() {
     });
 
   const approve = (menu_draft_id) => {
+    setLoading(true);
     var data = JSON.stringify({
       'menu_draft_id': menu_draft_id
     });
@@ -197,10 +200,14 @@ function Menu() {
       'Content-Type': 'application/json'
     };
 
-    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => console.log('assigned'))
+    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => {
+      setLoading(false);
+      
+    })
   }
 
   const assign = (menu_draft_id) => {
+    setLoading(true);
     var data = JSON.stringify({
       'menu_draft_id': menu_draft_id
     });
@@ -209,7 +216,9 @@ function Menu() {
       'Content-Type': 'application/json'
     };
 
-    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/assign_menu', 'put', headers, data).then((result) => console.log('assigned'))
+    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/assign_menu', 'put', headers, data).then((result) => {
+      setLoading(false);
+    });
   }
 
   return (
@@ -224,16 +233,15 @@ function Menu() {
                   CATEGORIES 
                   <Badge style={{ marginLeft: '5px' }} className='badge rounded-pill' bg={options[menu_details.menu_process]}>{menu_details.menu_process}</Badge> 
                 </span>
-
                 
                 { menu_details.menu_process === 'assignable'? 
-                  <Button className='flex-div-b' style={{ width: '8%' }}  variant="light" onClick={() => assign(menu_details.menu_draft_id)}> 
-                    Assign
+                  <Button disabled={isLoading} className='flex-div-b' style={{ width: '8%' }}  variant="light" onClick={() => assign(menu_details.menu_draft_id)}> 
+                    {isLoading ? 'Loading…' : 'Assign'}
                   </Button> : '' }
 
                 { menu_details.menu_process === 'in_review'? 
-                  <Button className='flex-div-b' style={{ width: '9%' }} variant="light" onClick={() => approve(menu_details.menu_draft_id)}> 
-                    Approve
+                  <Button disabled={isLoading} className='flex-div-b' style={{ width: '9%' }} variant="light" onClick={() => approve(menu_details.menu_draft_id)}> 
+                    {isLoading ? 'Loading…' : 'Approve'}
                   </Button> : '' }
 
               </h5>
