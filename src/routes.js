@@ -7,13 +7,6 @@ import Orders from 'views/Orders';
 
 const dashboardRoutes = [
   {
-    path: "/dashboard",
-    name: "Dashboard",
-    component: Dashboard,
-    sidebar: true,
-    layout: "/admin",
-  },
-  {
     path: "/menus",
     name: "Menus",
     component: Menus,
