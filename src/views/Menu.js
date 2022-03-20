@@ -242,7 +242,6 @@ function Menu() {
           <Card className="card-user">
             <Card.Header>
               <h5 className="h6 flex-div">
-                
                 <span className='flex-div-a'>
                   CATEGORIES 
                   <Badge style={{ marginLeft: '5px' }} className='badge rounded-pill' bg={options[menu_details.menu_process]}>{menu_details.menu_process}</Badge> 
