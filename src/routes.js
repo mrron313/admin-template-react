@@ -1,7 +1,9 @@
-import Dashboard from "views/Dashboard.js";
-import Menus from "views/Menus.js";
-import Menu from "views/Menu.js";
-import Stores from "views/Stores.js";
+import Dashboard from 'views/Dashboard.js';
+import Menus from 'views/Menus.js';
+import Menu from 'views/Menu.js';
+import Stores from 'views/Stores.js';
+import Users from 'views/Users.js'
+import Orders from 'views/Orders';
 
 const dashboardRoutes = [
   {
@@ -23,6 +25,20 @@ const dashboardRoutes = [
     name: "Menu",
     component: Menu,
     sidebar: false,
+    layout: "/admin",
+  },
+  {
+    path: "/users",
+    name: "Users",
+    component: Users,
+    sidebar: true,
+    layout: "/admin",
+  },
+  {
+    path: "/orders",
+    name: "Orders",
+    component: Orders,
+    sidebar: true,
     layout: "/admin",
   },
   {

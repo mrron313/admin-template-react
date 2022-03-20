@@ -29,7 +29,6 @@ const headers = {
 };
 
 function MenuComponent(props) {
-  const [keyWord, setKeyword] = useState('');
   const [selectedValues, setSelectedValues] = useState([...statuses]);
   const [loading, setLoading] = useState(true);
   const [menus, setMenus] = useState([]);
@@ -117,21 +116,6 @@ function MenuComponent(props) {
             hidePlaceholder={true}
             showArrow={true}
           />
-          {/* <Form.Control
-            as="select"
-            value={keyWord}
-            onChange={e => {
-              setKeyword(e.target.value);
-            }}
-          >
-            <option value="">Select Status</option>
-
-            {Object.keys(options).map((key) => {
-              return (
-                <option>{key}</option>
-              )
-            })}
-          </Form.Control> */}
         </Row>
       )}
 
