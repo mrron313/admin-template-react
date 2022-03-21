@@ -16,6 +16,7 @@ import AccordionContext from "react-bootstrap/AccordionContext";
 import { BsFillArrowRightCircleFill, BsFillArrowDownCircleFill, BsChevronRight, BsChevronDown } from "react-icons/bs";
 import CustomToast from '../components/Notification/CustomToast';
 import { putApiCall } from 'Helpers/api';
+import { copyToClipboard } from 'Helpers/copy';
 
 const options = {
   'complete': 'success',
@@ -196,7 +197,7 @@ function Menu() {
       );
     });
 
-  const approve = (menu_draft_id) => {
+  const approve = (menu_draft_id, entering_id) => {
     setLoading(true);
     var data = JSON.stringify({
       'menu_draft_id': menu_draft_id
@@ -205,17 +206,19 @@ function Menu() {
     var headers = { 
       'Content-Type': 'application/json'
     };
+
+    copyToClipboard(entering_id);
 
     putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => {
       setLoading(false);
       toast.success('The menu is approved');
       setTimeout(() => {
-        history.push('/admin/menus');
+        goBack();
       }, 2000);
     });
   }
 
-  const assign = (menu_draft_id) => {
+  const assign = (menu_draft_id, entering_id) => {
     setLoading(true);
     var data = JSON.stringify({
       'menu_draft_id': menu_draft_id
@@ -224,38 +227,55 @@ function Menu() {
     var headers = { 
       'Content-Type': 'application/json'
     };
+    
+    copyToClipboard(entering_id);
 
     putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/assign_menu', 'put', headers, data).then((result) => {
       setLoading(false);
       toast.success('The menu is assigned');
       setTimeout(() => {
-        history.push('/admin/menus');
+        goBack();
       }, 2000);
     });
+  }
+
+  const goBack = () => {
+    history.push('/admin/menus');
+  }
+
+  const goToURL = () => {
+    window.open("http://www.google.com", "_blank")
   }
 
   return (
     <>
       <CustomToast />
       <Row>
-        <Col md="8" className="mx-auto">
+        <Col md="3" className="mx-auto mb-3">
+          <Button onClick={goBack}>Go Back to Menus</Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col md="9" className="mx-auto">
           <Card className="card-user">
             <Card.Header>
               <h5 className="h6 flex-div">
                 <span className='flex-div-a'>
-                  CATEGORIES 
+                  CATEGORIES <Badge onClick={goToURL} style={{ cursor: 'pointer' }} size='sm'>url</Badge>
                   <Badge style={{ marginLeft: '5px' }} className='badge rounded-pill' bg={options[menu_details.menu_process]}>{menu_details.menu_process}</Badge> 
                 </span>
                 
-                { menu_details.menu_process === 'assignable'? 
-                  <Button disabled={isLoading !== null} className='flex-div-b' style={{ width: '10%' }}  variant="light" onClick={() => assign(menu_details.menu_draft_id)}> 
-                    {isLoading === null? 'Assign' : 'Loading'}
-                  </Button> : '' }
+                <div style={{ width: '15%' }} className='flex-div-b'>
+                  { menu_details.menu_process === 'assignable'? 
+                    <Button disabled={isLoading !== null}  variant="light" onClick={() => assign(menu_details.menu_draft_id, menu_details.entering_id)}> 
+                      {isLoading === null? 'Assign' : 'Loading'}
+                    </Button> : '' }
 
-                { menu_details.menu_process === 'in_review'? 
-                  <Button disabled={isLoading !== null} className='flex-div-b' style={{ width: '10%' }} variant="light" onClick={() => approve(menu_details.menu_draft_id)}> 
-                    {isLoading === null? 'Approve' : 'Loading'}
-                  </Button> : '' }
+                  { menu_details.menu_process  === 'in_review'? 
+                    <Button disabled={isLoading !== null} className='flex-div-b' variant="light" onClick={() => approve(menu_details.menu_draft_id, menu_details.entering_id)}> 
+                      {isLoading === null? 'Approve' : 'Loading'}
+                    </Button> : '' }
+                </div>
               </h5>
             </Card.Header>
             <hr></hr>

@@ -81,7 +81,7 @@ function MenuComponent(props) {
         <div className="store-item flex-div">
           <span className="flex-div-a">{ d.store_name } <Badge className='badge rounded-pill' bg={options[d.menu_process]}>{d.menu_process}</Badge></span> 
           <Button variant="light" size="sm" className="flex-div-b" onClick={() => openMenu(d)}>
-            Open
+            View
           </Button>
         </div>
       );
