@@ -10,7 +10,6 @@ export const putApiCall = (url, method, headers, data) => {
   
   return axios(config)
   .then((response) => {
-    console.log(response, url, 'response')
     return response;
   })
   .catch(function (error) {

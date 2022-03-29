@@ -251,21 +251,25 @@ function Menu() {
     <>
       <CustomToast />
       <Row>
-        <Col md="3" className="mx-auto mb-3">
+        <Col md="3" className="offset-md-1 mb-3">
           <Button onClick={goBack}>Go Back to Menus</Button>
         </Col>
       </Row>
       <Row>
-        <Col md="9" className="mx-auto">
+        <Col md="10" className="offset-md-1">
           <Card className="card-user">
             <Card.Header>
               <h5 className="h6 flex-div">
-                <span className='flex-div-a'>
-                  CATEGORIES <Badge onClick={goToURL} style={{ cursor: 'pointer' }} size='sm'>url</Badge>
+                <span style={{ width: '40%' }} className='flex-div-a'>
+                  CATEGORIES 
                   <Badge style={{ marginLeft: '5px' }} className='badge rounded-pill' bg={options[menu_details.menu_process]}>{menu_details.menu_process}</Badge> 
                 </span>
+
+                <span style={{ width: '30%' }}>
+                  <Badge onClick={goToURL} style={{ cursor: 'pointer' }} size='sm'>url</Badge>
+                </span>
                 
-                <div style={{ width: '15%' }} className='flex-div-b'>
+                <div style={{ width: '10%', textAlign: 'right' }} className='flex-div-b'>
                   { menu_details.menu_process === 'assignable'? 
                     <Button disabled={isLoading !== null}  variant="light" onClick={() => assign(menu_details.menu_draft_id, menu_details.entering_id)}> 
                       {isLoading === null? 'Assign' : 'Loading'}

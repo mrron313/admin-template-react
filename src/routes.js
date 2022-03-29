@@ -7,9 +7,23 @@ import Orders from 'views/Orders';
 
 const dashboardRoutes = [
   {
+    path: "/stores",
+    name: "Stores",
+    component: Stores,
+    sidebar: true,
+    layout: "/admin",
+  },
+  {
     path: "/menus",
     name: "Menus",
     component: Menus,
+    sidebar: true,
+    layout: "/admin",
+  },
+  {
+    path: "/orders",
+    name: "Orders",
+    component: Orders,
     sidebar: true,
     layout: "/admin",
   },
@@ -24,20 +38,6 @@ const dashboardRoutes = [
     path: "/users",
     name: "Users",
     component: Users,
-    sidebar: true,
-    layout: "/admin",
-  },
-  {
-    path: "/orders",
-    name: "Orders",
-    component: Orders,
-    sidebar: true,
-    layout: "/admin",
-  },
-  {
-    path: "/stores",
-    name: "Stores",
-    component: Stores,
     sidebar: true,
     layout: "/admin",
   },

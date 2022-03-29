@@ -29,49 +29,106 @@ const headers = {
 };
 
 function MenuComponent(props) {
+  const history = useHistory();
+  const { activeTab } = props;
   const [selectedValues, setSelectedValues] = useState([...statuses]);
   const [loading, setLoading] = useState(true);
   const [menus, setMenus] = useState([]);
+  const [dateCreatedNext, setDateCreatedNext] = useState(null);
+  const [dateCreatedPrev, setDateCreatedPrev] = useState([null]);
+  const [page, setPage] = useState(0);
 
-  const history = useHistory();
+  const handleOnClickNext = () => {
+    setPage(page+1);
+    let prevs = dateCreatedPrev;
+    prevs.push(dateCreatedNext);
+    setDateCreatedPrev(prevs);
 
-  useEffect(() => {
-    if (props.type !== props.activeTab) return;
+    fetchMenusAPI('next');
+  };
 
+  const handleOnClickPrev = () => {
+    if (page>0) {
+      let prevs = dateCreatedPrev;
+      prevs.pop();
+      let p = page - 1;
+
+      setDateCreatedPrev(prevs);
+      setPage(p);
+      fetchMenusAPI('prev', prevs, p);
+    }
+  };
+
+  const fetchMenusAPI = (type, prevs, p) => {
     setLoading(true);
+    
+    let data, url;
 
-    let data = {
-      "date_created": null
-    };
+    data = {
+      "date_created": type === 'next'? dateCreatedNext : type === 'prev'? prevs[p] : null,
+    }
 
-    let url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_menus';
-
-    if (props.type === 'menus') {
-      if (selectedValues.length === 5) {
-        data = JSON.stringify(data);
-      } else {
-        url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/filter_menu';
-        data = {
-          "date_created": null,
-          statuses: selectedValues
-        };
-        data = JSON.stringify(data);
-      }
+    if (selectedValues.length === 5) {
+      data = JSON.stringify(data);
+      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_menus';
     } else {
-      if (props.type === 'inReviewMenus') {
-        url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_submitted_menus';
-        data = JSON.stringify(data);
-      } else if (props.type === 'assignableMenus') {
-        url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_assignable_menus';
-        data = JSON.stringify(data);
-      }
+      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/filter_menu';
+      data.statuses = selectedValues;
+      data = JSON.stringify(data);
     }
 
     putApiCall(url, 'put', headers, data).then((result) => {
-      setMenus(result.data);
-      setLoading(false);
+      let ln = result.data.length;
+      if (ln>0) {
+        setDateCreatedNext(result.data[ln-1].date_created);
+        setMenus(result.data);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        setMenus([]);
+      }
     });
-  }, [props.activeTab, selectedValues.length]);
+  }
+
+  const fetchOtherMenusAPI = () => {
+    setLoading(true);
+
+    let url, data;
+    data = {
+      "date_created": null
+    };
+
+    if (activeTab == 1) {
+      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_assignable_menus';
+      data = JSON.stringify(data);
+    } else if (activeTab == 2) {
+      console.log(activeTab);
+      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_submitted_menus';
+      data = JSON.stringify(data);
+    }
+
+    putApiCall(url, 'put', headers, data).then((result) => {
+      let ln = result.data.length;
+      if (ln>0) {
+        setDateCreatedNext(result.data[ln-1].date_created);
+        setMenus(result.data);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        setMenus([]);
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (activeTab !== null) {
+      if (activeTab == 0) {
+        fetchMenusAPI();
+      } else {
+        fetchOtherMenusAPI();
+      }
+    }
+  }, [activeTab, selectedValues.length]);
 
   const renderStores = (data) => {
     if (data.length === 0) return 'No menus found';
@@ -80,7 +137,7 @@ function MenuComponent(props) {
       return (
         <div className="store-item flex-div">
           <span className="flex-div-a">{ d.store_name } <Badge className='badge rounded-pill' bg={options[d.menu_process]}>{d.menu_process}</Badge></span> 
-          <Button variant="light" size="sm" className="flex-div-b" onClick={() => openMenu(d)}>
+          <Button variant="primary" size="sm" className="flex-div-b" onClick={() => openMenu(d)}>
             View
           </Button>
         </div>
@@ -103,30 +160,44 @@ function MenuComponent(props) {
 
   return (
     <Container fluid>
-      {props.type === 'menus' && (
-        <Row className="mb-3">
+      <div style={{ minHeight: '700px' }}>
+        {activeTab === 0 && (
+          <Row className="mb-3">
+            <Multiselect
+              options={statuses} 
+              selectedValues={selectedValues} 
+              onSelect={onSelect} 
+              onRemove={onRemove} 
+              showCheckbox={true}
+              isObject={false}
+              hidePlaceholder={true}
+              showArrow={true}
+            />
+          </Row>
+        )}
 
-          <Multiselect
-            options={statuses} 
-            selectedValues={selectedValues} 
-            onSelect={onSelect} 
-            onRemove={onRemove} 
-            showCheckbox={true}
-            isObject={false}
-            hidePlaceholder={true}
-            showArrow={true}
-          />
-        </Row>
-      )}
+        {loading === true && (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        )}
+        {loading === false && 
+          renderStores(menus) 
+        }
+      </div>
 
-      {loading === true && (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+      {activeTab === 0 && (
+        <nav aria-label="Page navigation example">
+          <ul className="pagination justify-content-center">
+            <li className="page-item">
+              <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
+            </li>
+            <li className="page-item">
+              <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
+            </li>
+          </ul>
+        </nav>
       )}
-      {loading === false && 
-        renderStores(menus)
-      }
     </Container>
   );
 }

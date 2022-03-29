@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import MenuComponent from '../components/MenuComponent/index.js'
 import { Tabs, Tab } from 'react-bootstrap'
@@ -9,7 +9,14 @@ import {
 } from "react-bootstrap";
 
 function Menus() {
-  const [key, setKey] = useState('menus');
+  const [activeTab, setActiveTab] = useState(null);
+
+  useEffect(() => {
+    let item = localStorage.getItem('activeTabMenus');
+
+    if (!item) setActiveTab(0); 
+    else setActiveTab(item);
+  }, []);
   
   const menuTypes = [
     {
@@ -31,14 +38,17 @@ function Menus() {
       <Row>
         <Tabs 
           id="controlled-tab-example"
-          activeKey={key}
-          onSelect={(k) => setKey(k)} 
+          activeKey={activeTab}
+          onSelect={(k) => {
+            localStorage.setItem('activeTabMenus', k);
+            setActiveTab(k);
+          }} 
           className="mb-3"
         >
-          {menuTypes.map(menu => {
+          {menuTypes.map((menu, i) => {
             return (
-              <Tab eventKey={menu.name} activeKey={0} title={menu.title}>        
-                <MenuComponent type={menu.name} activeTab={key} menuTypes={menuTypes} />
+              <Tab eventKey={i} activeKey={activeTab} title={menu.title}>        
+                <MenuComponent activeTab={activeTab} />
               </Tab>
             );
           })}
