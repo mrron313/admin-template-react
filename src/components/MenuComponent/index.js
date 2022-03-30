@@ -135,7 +135,7 @@ function MenuComponent(props) {
 
     return data.map(d => {
       return (
-        <div className="store-item flex-div">
+        <div onClick={() => openMenu(d)} style={{ cursor: 'pointer' }} className="store-item flex-div">
           <span className="flex-div-a">{ d.store_name } <Badge className='badge rounded-pill' bg={options[d.menu_process]}>{d.menu_process}</Badge></span> 
           <Button variant="primary" size="sm" className="flex-div-b" onClick={() => openMenu(d)}>
             View

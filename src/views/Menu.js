@@ -243,8 +243,9 @@ function Menu() {
     history.push('/admin/menus');
   }
 
-  const goToURL = () => {
-    window.open("http://www.google.com", "_blank")
+  const goToURL = (url) => {
+    console.log(url);
+    window.open(`http://${url}`, "_blank")
   }
 
   return (
@@ -266,7 +267,7 @@ function Menu() {
                 </span>
 
                 <span style={{ width: '30%' }}>
-                  <Badge onClick={goToURL} style={{ cursor: 'pointer' }} size='sm'>url</Badge>
+                  <Badge onClick={() => goToURL(menu_details.entering_url)} style={{ cursor: 'pointer' }} size='sm'>url</Badge>
                 </span>
                 
                 <div style={{ width: '10%', textAlign: 'right' }} className='flex-div-b'>
