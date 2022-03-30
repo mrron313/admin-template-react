@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
 import { Container, Row, Badge, Button, Form, Spinner } from "react-bootstrap";
-import Multiselect from 'multiselect-react-dropdown';
+import { AiOutlineCheck } from "react-icons/ai";
+import { GiCancel } from "react-icons/gi";
+
 import { useHistory } from 'react-router-dom';
 
 import { putApiCall } from "Helpers/api";
@@ -109,11 +111,98 @@ function StoreComponent(props) {
     return data.map(d => {
       console.log(d);
       return (
-        <div onClick={() => openStore(d)} style={{ cursor: 'pointer' }} className="store-item flex-div">
-          <span className="flex-div-a">{ d.store_name } <Badge className='badge rounded-pill'>{d.store_address}</Badge></span> 
-          <Button variant="primary" size="sm" className="flex-div-b" onClick={() => openStore(d)}>
-            View
-          </Button>
+        <div onClick={() => openStore(d)} style={{ cursor: 'pointer' }} className="store-item">
+          <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th width="15%" scope="col">Name</th>
+                  <th width="30%" scope="col">Address</th>
+                  <th width="15%" scope="col">Owner</th>
+                  <th width="15%" scope="col">Phone Number</th>
+                  <th width="15%" scope="col">Completion Information</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{d.store_name}</th>
+                  <td>{d.store_address}</td>
+                  <td scope="col">{`${d.store_owner_firstname} ${d.store_owner_lastname}`}</td>
+                  <td>{d.store_phonenumber}</td>
+                  <td>
+                    <h6 className="d-inline">
+                      <Badge pill bg={d.completion_information.menu ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.menu ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        menu
+                      </Badge>
+                    </h6>
+                    <h6 className="d-inline">
+                      <Badge pill bg={d.completion_information.bank_account ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.bank_account ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        bank account
+                      </Badge>
+                    </h6>
+                    <h6 className="d-inline">
+                      <Badge pill bg={d.completion_information.discount_and_commission ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.discount_and_commission ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        discount and commission
+                      </Badge>
+                    </h6>
+                    <h6 className="d-inline">
+                      <Badge pill bg={d.completion_information.opening_hours ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.opening_hours ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        opening hours
+                      </Badge>
+                    </h6>
+                    <h6 className="d-inline">
+                      <Badge pill bg={d.completion_information.tax_rate ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.tax_rate ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        tax rate
+                      </Badge>
+                    </h6>
+                    <h6 className="d-inline">
+                      <Badge pill bg={d.completion_information.timezone ? 'success' : 'danger'}  className="m-1">
+                        {d.completion_information.timezone ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        timezone
+                      </Badge>
+                    </h6>
+                    <h6>
+                      <Badge pill bg={d.completion_information.initial_login ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.initial_login ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        initial login
+                      </Badge>
+                    </h6>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
         </div>
       );
     });

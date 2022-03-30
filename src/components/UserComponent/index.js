@@ -120,12 +120,31 @@ function UserComponent(props) {
     if (data.length === 0) return 'No menus found';
 
     return data.map(d => {
+      console.log(d);
       return (
-        <div onClick={() => openMenu(d)} style={{ cursor: 'pointer' }} className="store-item flex-div">
-          <span className="flex-div-a">{ d.firstname } <Badge className='badge rounded-pill'>{d.phonenumber}</Badge></span> 
-          <Button variant="primary" size="sm" className="flex-div-b" onClick={() => openMenu(d)}>
-            View
-          </Button>
+        <div onClick={() => openMenu(d)} style={{ cursor: 'pointer' }} className="store-item">
+          <div>
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th width="40%" scope="col">Name</th>
+                  <th width="30%" scope="col">Phone Number</th>
+                  {(activeTab == 1) && (
+                    <th width="30%" scope="col">Verification</th>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{`${d.firstname} ${d.lastname}`}</th>
+                  <td>{d.phonenumber}</td>
+                  {(activeTab == 1) && (
+                    <td scope="col">{`${d.verified_affiliate_bank_account}`}</td>
+                  )}
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       );
     });
@@ -139,7 +158,6 @@ function UserComponent(props) {
   return (
     <Container fluid>
       <div style={{ minHeight: '700px' }}>
-
         {loading === true && (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -150,18 +168,16 @@ function UserComponent(props) {
         }
       </div>
 
-      {activeTab == 0 && (
-        <nav aria-label="Page navigation example">
-          <ul className="pagination justify-content-center">
-            <li className="page-item">
-              <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
-            </li>
-            <li className="page-item">
-              <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
-            </li>
-          </ul>
-        </nav>
-      )}
+      <nav aria-label="Page navigation example">
+        <ul className="pagination justify-content-center">
+          <li className="page-item">
+            <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
+          </li>
+          <li className="page-item">
+            <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
+          </li>
+        </ul>
+      </nav>
     </Container>
   );
 }
