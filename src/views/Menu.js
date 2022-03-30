@@ -277,7 +277,7 @@ function Menu() {
                     </Button> : '' }
 
                   { menu_details.menu_process  === 'in_review'? 
-                    <Button disabled={isLoading !== null} className='flex-div-b' variant="light" onClick={() => approve(menu_details.menu_draft_id, menu_details.entering_id)}> 
+                    <Button disabled={isLoading !== null} variant="light" onClick={() => approve(menu_details.menu_draft_id, menu_details.entering_id)}> 
                       {isLoading === null? 'Approve' : 'Loading'}
                     </Button> : '' }
                 </div>
