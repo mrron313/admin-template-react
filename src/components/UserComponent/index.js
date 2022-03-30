@@ -28,69 +28,62 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-function MenuComponent(props) {
+function UserComponent(props) {
   const history = useHistory();
   const { activeTab } = props;
-  const [selectedValues, setSelectedValues] = useState([...statuses]);
   const [loading, setLoading] = useState(true);
-  const [menus, setMenus] = useState([]);
-  const [dateCreatedNext, setDateCreatedNext] = useState(null);
-  const [dateCreatedPrev, setDateCreatedPrev] = useState([null]);
+  const [users, setUsers] = useState([]);
+  const [dateCreatedNextForStoreOwner, setDateCreatedNextForStoreOwner] = useState(null);
+  const [dateCreatedPrevForStoreOwner, setDateCreatedPrevForStoreOwner] = useState([null]);
   const [page, setPage] = useState(0);
 
   const handleOnClickNext = () => {
     setPage(page+1);
-    let prevs = dateCreatedPrev;
-    prevs.push(dateCreatedNext);
-    setDateCreatedPrev(prevs);
+    let prevs = dateCreatedPrevForStoreOwner;
+    prevs.push(dateCreatedNextForStoreOwner);
+    setDateCreatedPrevForStoreOwner(prevs);
 
-    fetchMenusAPI('next');
+    fetchStoreOwners('next');
   };
 
   const handleOnClickPrev = () => {
     if (page>0) {
-      let prevs = dateCreatedPrev;
+      let prevs = dateCreatedPrevForStoreOwner;
       prevs.pop();
       let p = page - 1;
 
-      setDateCreatedPrev(prevs);
+      setDateCreatedPrevForStoreOwner(prevs);
       setPage(p);
-      fetchMenusAPI('prev', prevs, p);
+      fetchStoreOwners('prev', prevs, p);
     }
   };
 
-  const fetchMenusAPI = (type, prevs, p) => {
+  const fetchStoreOwners = (type, prevs, p) => {
     setLoading(true);
     
     let data, url;
 
     data = {
-      "date_created": type === 'next'? dateCreatedNext : type === 'prev'? prevs[p] : null,
+      "date_created": type === 'next'? dateCreatedNextForStoreOwner : type === 'prev'? prevs[p] : null,
     }
-
-    if (selectedValues.length === 5) {
-      data = JSON.stringify(data);
-      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_menus';
-    } else {
-      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/filter_menu';
-      data.statuses = selectedValues;
-      data = JSON.stringify(data);
-    }
+    
+    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_store_owners';
+    data = JSON.stringify(data);
 
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;
       if (ln>0) {
-        setDateCreatedNext(result.data[ln-1].date_created);
-        setMenus(result.data);
+        setDateCreatedNextForStoreOwner(result.data[ln-1].date_created);
+        setUsers(result.data);
         setLoading(false);
       } else {
         setLoading(false);
-        setMenus([]);
+        setUsers([]);
       }
     });
   }
 
-  const fetchOtherMenusAPI = () => {
+  const fetchMarketers = () => {
     setLoading(true);
 
     let url, data;
@@ -98,24 +91,17 @@ function MenuComponent(props) {
       "date_created": null
     };
 
-    if (activeTab == 1) {
-      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_assignable_menus';
-      data = JSON.stringify(data);
-    } else if (activeTab == 2) {
-      console.log(activeTab);
-      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_submitted_menus';
-      data = JSON.stringify(data);
-    }
+    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_marketers';
+    data = JSON.stringify(data);
 
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;
       if (ln>0) {
-        setDateCreatedNext(result.data[ln-1].date_created);
-        setMenus(result.data);
+        setUsers(result.data);
         setLoading(false);
       } else {
         setLoading(false);
-        setMenus([]);
+        setUsers([]);
       }
     });
   }
@@ -123,20 +109,20 @@ function MenuComponent(props) {
   useEffect(() => {
     if (activeTab !== null) {
       if (activeTab == 0) {
-        fetchMenusAPI();
+        fetchStoreOwners();
       } else {
-        fetchOtherMenusAPI();
+        fetchMarketers();
       }
     }
-  }, [activeTab, selectedValues.length]);
+  }, [activeTab]);
 
-  const renderStores = (data) => {
+  const renderUsers = (data) => {
     if (data.length === 0) return 'No menus found';
 
     return data.map(d => {
       return (
         <div onClick={() => openMenu(d)} style={{ cursor: 'pointer' }} className="store-item flex-div">
-          <span className="flex-div-a">{ d.store_name } <Badge className='badge rounded-pill' bg={options[d.menu_process]}>{d.menu_process}</Badge></span> 
+          <span className="flex-div-a">{ d.firstname } <Badge className='badge rounded-pill'>{d.phonenumber}</Badge></span> 
           <Button variant="primary" size="sm" className="flex-div-b" onClick={() => openMenu(d)}>
             View
           </Button>
@@ -145,36 +131,14 @@ function MenuComponent(props) {
     });
   }
 
-  const openMenu = (menu_details) => {
-    localStorage.setItem("menu_details", JSON.stringify(menu_details));
-    history.push("/admin/menu");
+  const openMenu = (user_details) => {
+    localStorage.setItem("user_details", JSON.stringify(user_details));
+    history.push("/admin/user");
   };
-
-  const onSelect = (selectedList, selectedItem) => {
-    setSelectedValues(selectedList);
-  }
-
-  const onRemove = (selectedList, removedItem) => {
-    setSelectedValues(selectedList);
-  }
 
   return (
     <Container fluid>
       <div style={{ minHeight: '700px' }}>
-        {activeTab === 0 && (
-          <Row className="mb-3">
-            <Multiselect
-              options={statuses} 
-              selectedValues={selectedValues} 
-              onSelect={onSelect} 
-              onRemove={onRemove} 
-              showCheckbox={true}
-              isObject={false}
-              hidePlaceholder={true}
-              showArrow={true}
-            />
-          </Row>
-        )}
 
         {loading === true && (
           <Spinner animation="border" role="status">
@@ -182,7 +146,7 @@ function MenuComponent(props) {
           </Spinner>
         )}
         {loading === false && 
-          renderStores(menus) 
+          renderUsers(users) 
         }
       </div>
 
@@ -202,4 +166,4 @@ function MenuComponent(props) {
   );
 }
 
-export default MenuComponent;
+export default UserComponent;

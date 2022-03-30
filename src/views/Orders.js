@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+import OrderComponent from '../components/OrderComponent/index.js';
 
 import {
   Container,
@@ -9,7 +11,7 @@ function Orders() {
   return (
     <Container fluid>
       <Row>
-      
+        <OrderComponent />
       </Row>
     </Container>
   );
