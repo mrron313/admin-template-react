@@ -78,11 +78,29 @@ function MenuComponent(props) {
     return data.map(d => {
       console.log(d);
       return (
-        <div onClick={() => openMenu(d)} style={{ cursor: 'pointer' }} className="store-item flex-div">
-          <span className="flex-div-a">{ d.store_name } </span> 
-          <Button variant="primary" size="sm" className="flex-div-b" onClick={() => openOrder(d)}>
-            View
-          </Button>
+        <div onClick={() => openMenu(d)} style={{ cursor: 'pointer' }} className="store-item">
+          <div>
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Customer Name</th>
+                  <th scope="col">Store Name</th>
+                  <th scope="col">Customer Phone Number</th>
+                  <th scope="col">Total Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{d.order_id}</th>
+                  <td>{d.customer_name}</td>
+                  <td>{d.store_name}</td>
+                  <td>{d.phonenumber}</td>
+                  <td>{d.total_amount}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       );
     });
