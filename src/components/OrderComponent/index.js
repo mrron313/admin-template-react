@@ -12,7 +12,7 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-function MenuComponent(props) {
+function OrderComponent(props) {
   const history = useHistory();
 
   const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ function MenuComponent(props) {
     return data.map(d => {
       console.log(d);
       return (
-        <div onClick={() => openMenu(d)} style={{ cursor: 'pointer' }} className="store-item">
+        <div onClick={() => openOrder(d)} style={{ cursor: 'pointer' }} className="store-item">
           <div>
             <table class="table table-borderless">
               <thead>
@@ -139,4 +139,4 @@ function MenuComponent(props) {
   );
 }
 
-export default MenuComponent;
+export default OrderComponent;
