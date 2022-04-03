@@ -16,6 +16,7 @@ const headers = {
 
 function StoreComponent(props) {
   const history = useHistory();
+  const token = localStorage.getItem('token');
   const { activeTab } = props;
   const [loading, setLoading] = useState(true);
   const [stores, setStores] = useState([]);
@@ -59,6 +60,8 @@ function StoreComponent(props) {
     url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_stores';
     data = JSON.stringify(data);
 
+    headers.Authorization = `Bearer ${token}`; 
+
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;
       if (ln>0) {
@@ -82,6 +85,8 @@ function StoreComponent(props) {
 
     url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_pending_stores';
     data = JSON.stringify(data);
+
+    headers.Authorization = `Bearer ${token}`; 
 
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;

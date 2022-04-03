@@ -30,6 +30,8 @@ const headers = {
 
 function MenuComponent(props) {
   const history = useHistory();
+  const token = localStorage.getItem('token');
+
   const { activeTab } = props;
   const [selectedValues, setSelectedValues] = useState([...statuses]);
   const [loading, setLoading] = useState(true);
@@ -77,6 +79,8 @@ function MenuComponent(props) {
       data = JSON.stringify(data);
     }
 
+    headers.Authorization = `Bearer ${token}`; 
+
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;
       if (ln>0) {
@@ -106,6 +110,8 @@ function MenuComponent(props) {
       url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_submitted_menus';
       data = JSON.stringify(data);
     }
+
+    headers.Authorization = `Bearer ${token}`; 
 
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;

@@ -14,6 +14,7 @@ const headers = {
 
 function OrderComponent(props) {
   const history = useHistory();
+  const token = localStorage.getItem('token');
 
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
@@ -54,6 +55,8 @@ function OrderComponent(props) {
 
     data = JSON.stringify(data);
     url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_orders';
+
+    headers.Authorization = `Bearer ${token}`; 
 
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;

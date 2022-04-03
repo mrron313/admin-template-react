@@ -11,6 +11,8 @@ import Orders from 'views/Orders';
 import Store from 'views/Store.js'
 import Stores from 'views/Stores';
 
+import Login from 'views/Login';
+
 const dashboardRoutes = [
   {
     path: "/stores",
@@ -67,6 +69,13 @@ const dashboardRoutes = [
     component: User,
     sidebar: false,
     layout: "/admin",
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    sidebar: false,
+    layout: "/",
   },
 ];
 

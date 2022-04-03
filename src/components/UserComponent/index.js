@@ -8,28 +8,13 @@ import { useHistory } from 'react-router-dom';
 
 import { putApiCall } from "Helpers/api";
 
-const options = {
-  'complete': 'success',
-  'assigned': 'warning',
-  'in_review': 'info',
-  'assignable': 'secondary',
-  'new': 'primary',
-};
-
-const statuses = [
-  'complete',
-  'assigned',
-  'in_review',
-  'assignable',
-  'new',
-];
-
 const headers = { 
   'Content-Type': 'application/json'
 };
 
 function UserComponent(props) {
   const history = useHistory();
+  const token = localStorage.getItem('token');
   const { activeTab } = props;
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
@@ -70,6 +55,8 @@ function UserComponent(props) {
     url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_store_owners';
     data = JSON.stringify(data);
 
+    headers.Authorization = `Bearer ${token}`; 
+
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;
       if (ln>0) {
@@ -93,6 +80,8 @@ function UserComponent(props) {
 
     url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_marketers';
     data = JSON.stringify(data);
+
+    headers.Authorization = `Bearer ${token}`; 
 
     putApiCall(url, 'put', headers, data).then((result) => {
       let ln = result.data.length;
