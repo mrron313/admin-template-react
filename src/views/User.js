@@ -13,7 +13,7 @@ export default function User() {
         style={{fontSize: "1.1em"}} 
         mainStyle="padding:1.5em" 
         valueStyle="font-size:1.1em"
-        space={4}
+        space={6}
         >
       </JSONPretty>
     </div>

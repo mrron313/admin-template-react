@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { copyToClipboard } from 'Helpers/copy';
 import toast from 'react-hot-toast';
 
 import {
@@ -16,7 +16,6 @@ import AccordionContext from "react-bootstrap/AccordionContext";
 import { BsFillArrowRightCircleFill, BsFillArrowDownCircleFill, BsChevronRight, BsChevronDown } from "react-icons/bs";
 import CustomToast from '../components/Notification/CustomToast';
 import { putApiCall } from 'Helpers/api';
-import { copyToClipboard } from 'Helpers/copy';
 
 const options = {
   'complete': 'success',

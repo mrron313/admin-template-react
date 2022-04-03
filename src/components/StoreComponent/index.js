@@ -109,7 +109,6 @@ function StoreComponent(props) {
     if (data.length === 0) return 'No menus found';
 
     return data.map(d => {
-      console.log(d);
       return (
         <div onClick={() => openStore(d)} style={{ cursor: 'pointer' }} className="store-item">
           <table class="table table-borderless">
@@ -209,6 +208,7 @@ function StoreComponent(props) {
   }
 
   const openStore = (store_details) => {
+    if (activeTab == 1) store_details.store_status ='pending'; 
     localStorage.setItem("store_details", JSON.stringify(store_details));
     history.push("/admin/store");
   };
