@@ -243,7 +243,6 @@ function Menu() {
   }
 
   const goToURL = (url) => {
-    console.log(url);
     window.open(`http://${url}`, "_blank")
   }
 

@@ -3,7 +3,11 @@ import { useHistory } from 'react-router-dom';
 import JSONPretty from 'react-json-pretty';
 import CustomToast from '../components/Notification/CustomToast';
 import toast from 'react-hot-toast';
-import { Button } from 'react-bootstrap';
+import {   
+  Button,
+  Row,
+  Col, 
+} from 'react-bootstrap';
 import { putApiCall } from 'Helpers/api';
 
 export default function Store() {
@@ -36,20 +40,27 @@ export default function Store() {
   }
 
   return (
-    <div className='store-item'>
-      <CustomToast />
-      { store_details.store_status === 'pending' && (<Button disabled={isLoading !== null}  variant="light" onClick={() => approve(store_details.store_id)}> 
-        {isLoading === null? 'Approve' : 'Loading'}
-      </Button> )}
-      <JSONPretty 
-        id="json-pretty" 
-        data={store_details} 
-        style={{fontSize: "1.1em"}} 
-        mainStyle="padding:1.5em" 
-        valueStyle="font-size:1.1em"
-        space={4}
-        >
-      </JSONPretty>
-    </div>
+    <>
+      <Row>
+        <Col md="3">
+          <Button onClick={goBack}>Go Back to Stores</Button>
+        </Col>
+      </Row>
+      <div className='store-item'>
+        <CustomToast />
+        { store_details.store_status === 'pending' && (<Button disabled={isLoading !== null}  variant="light" onClick={() => approve(store_details.store_id)}> 
+          {isLoading === null? 'Approve' : 'Loading'}
+        </Button> )}
+        <JSONPretty 
+          id="json-pretty" 
+          data={store_details} 
+          style={{fontSize: "1.1em"}} 
+          mainStyle="padding:1.5em" 
+          valueStyle="font-size:1.1em"
+          space={4}
+          >
+        </JSONPretty>
+      </div>
+    </>
   );
 }
