@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Light Bootstrap Dashboard React - v2.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { Component } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 
@@ -22,9 +5,29 @@ import { Nav } from "react-bootstrap";
 
 function Sidebar({ color, image, routes }) {
   const location = useLocation();
+  
   const activeRoute = (routeName) => {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
+
+  const clearStorage = (name) => {
+    if (name === 'Stores') {
+      localStorage.removeItem('activeTabStores');
+    }
+
+    if (name === 'Users') {
+      localStorage.removeItem('activeTabUsers');
+    }
+
+    if (name === 'Orders') {
+      localStorage.removeItem('activeTabOrders');
+    }
+
+    if (name === 'Menus') {
+      localStorage.removeItem('activeTabMenus');
+    }
+  }
+
   return (
     <div className="sidebar" data-image={image} data-color={color}>
       <div
@@ -55,6 +58,7 @@ function Sidebar({ color, image, routes }) {
             if (prop.sidebar)
               return (
                 <li
+                  onClick={() => clearStorage(prop.name)}
                   className={
                     prop.upgrade
                       ? "active active-pro"

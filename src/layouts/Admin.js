@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { useLocation, Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation, Route, Switch, useHistory } from "react-router-dom";
 
 import AdminNavbar from "components/Navbars/Navbar";
 import Footer from "components/Footer/Footer";
@@ -7,9 +7,11 @@ import Sidebar from "components/Sidebar/Sidebar";
 
 import routes from "routes.js";
 
-function Admin() {
+function Admin({ getToken }) {
+  const token = localStorage.getItem('token');
   const [color, setColor] = React.useState("black");
   const location = useLocation();
+  const history = useHistory();
   const mainPanel = React.useRef(null);
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
@@ -27,7 +29,14 @@ function Admin() {
     });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!token) { 
+      getToken();
+      history.push('/login');
+    }
+  }, [token]);
+
+  useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainPanel.current.scrollTop = 0;

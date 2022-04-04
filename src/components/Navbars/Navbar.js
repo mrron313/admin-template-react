@@ -18,7 +18,6 @@ function AdminNavbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    history.push('/login');
   }
 
   return (
