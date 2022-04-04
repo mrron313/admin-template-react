@@ -75,12 +75,33 @@ function StoreComponent(props) {
     });
   }
 
-  const fetchPendingStores = () => {
+  const handleOnClickNextPendingStores = () => {
+    setPage(page+1);
+    let prevs = dateCreatedPrevForPendingStores;
+    prevs.push(dateCreatedNextForPendingStores);
+    setDateCreatedPrevForPendingStores(prevs);
+
+    fetchPendingStores('next');
+  };
+
+  const handleOnClickPrevPendingStores = () => {
+    if (page>0) {
+      let prevs = dateCreatedPrevForPendingStores;
+      prevs.pop();
+      let p = page - 1;
+
+      setDateCreatedPrevForPendingStores(prevs);
+      setPage(p);
+      fetchPendingStores('prev', prevs, p);
+    }
+  };
+
+  const fetchPendingStores = (type, prevs, p) => {
     setLoading(true);
 
     let url, data;
     data = {
-      "date_created": null
+      "date_created": type === 'next'? dateCreatedNextForPendingStores : type === 'prev'? prevs[p] : null,
     };
 
     url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_pending_stores';
@@ -103,15 +124,17 @@ function StoreComponent(props) {
   useEffect(() => {
     if (activeTab !== null) {
       if (activeTab == 0) {
+        setPage(0);
         fetchStores();
       } else {
+        setPage(0);
         fetchPendingStores();
       }
     }
   }, [activeTab]);
 
   const renderStores = (data) => {
-    if (data.length === 0) return 'No menus found';
+    if (data.length === 0) return 'No stores found';
 
     return data.map(d => {
       return (
@@ -232,16 +255,32 @@ function StoreComponent(props) {
         }
       </div>
 
-      <nav aria-label="Page navigation example">
-        <ul className="pagination justify-content-center">
-          <li className="page-item">
-            <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
-          </li>
-          <li className="page-item">
-            <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
-          </li>
-        </ul>
-      </nav>
+      { activeTab == 0 && (
+        <nav aria-label="Page navigation example">
+          <ul className="pagination justify-content-center">
+            <li className="page-item">
+              <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
+            </li>
+            <li className="page-item">
+              <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
+            </li>
+          </ul>
+        </nav>
+      )}
+
+      { activeTab == 1 && (
+        <nav aria-label="Page navigation example">
+          <ul className="pagination justify-content-center">
+            <li className="page-item">
+              <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrevPendingStores}>Previous</a>
+            </li>
+            <li className="page-item">
+              <span className="page-link" role="button" onClick={handleOnClickNextPendingStores}>Next</span>
+            </li>
+          </ul>
+        </nav>
+      )}
+
     </Container>
   );
 }

@@ -20,6 +20,9 @@ function UserComponent(props) {
   const [users, setUsers] = useState([]);
   const [dateCreatedNextForStoreOwner, setDateCreatedNextForStoreOwner] = useState(null);
   const [dateCreatedPrevForStoreOwner, setDateCreatedPrevForStoreOwner] = useState([null]);
+
+  const [dateCreatedNextForMarketers, setDateCreatedNextForMarketers] = useState(null);
+  const [dateCreatedPrevForMarketers, setDateCreatedPrevForMarketers] = useState([null]);
   const [page, setPage] = useState(0);
 
   const handleOnClickNext = () => {
@@ -70,12 +73,33 @@ function UserComponent(props) {
     });
   }
 
-  const fetchMarketers = () => {
+  const handleOnClickNextForMarketers = () => {
+    setPage(page+1);
+    let prevs = dateCreatedPrevForMarketers;
+    prevs.push(dateCreatedNextForMarketers);
+    setDateCreatedPrevForMarketers(prevs);
+
+    fetchMarketers('next');
+  };
+
+  const handleOnClickPrevForMarketers = () => {
+    if (page>0) {
+      let prevs = dateCreatedPrevForMarketers;
+      prevs.pop();
+      let p = page - 1;
+
+      setDateCreatedPrevForMarketers(prevs);
+      setPage(p);
+      fetchMarketers('prev', prevs, p);
+    }
+  };
+
+  const fetchMarketers = (type, prevs, p) => {
     setLoading(true);
 
     let url, data;
     data = {
-      "date_created": null
+      "date_created": type === 'next'? dateCreatedNextForMarketers : type === 'prev'? prevs[p] : null,
     };
 
     url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_marketers';
@@ -98,15 +122,17 @@ function UserComponent(props) {
   useEffect(() => {
     if (activeTab !== null) {
       if (activeTab == 0) {
+        setPage(0);
         fetchStoreOwners();
       } else {
+        setPage(0);
         fetchMarketers();
       }
     }
   }, [activeTab]);
 
   const renderUsers = (data) => {
-    if (data.length === 0) return 'No menus found';
+    if (data.length === 0) return 'No users found';
 
     return data.map(d => {
       console.log(d);
@@ -157,16 +183,33 @@ function UserComponent(props) {
         }
       </div>
 
-      <nav aria-label="Page navigation example">
-        <ul className="pagination justify-content-center">
-          <li className="page-item">
-            <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
-          </li>
-          <li className="page-item">
-            <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
-          </li>
-        </ul>
-      </nav>
+      { activeTab == 0 && (
+        <nav aria-label="Page navigation example">
+          <ul className="pagination justify-content-center">
+            <li className="page-item">
+              <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
+            </li>
+            <li className="page-item">
+              <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
+            </li>
+          </ul>
+        </nav>
+      )}
+
+      { activeTab == 1 && (
+        <nav aria-label="Page navigation example">
+          <ul className="pagination justify-content-center">
+            <li className="page-item">
+              <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrevForMarketers}>Previous</a>
+            </li>
+            <li className="page-item">
+              <span className="page-link" role="button" onClick={handleOnClickNextForMarketers}>Next</span>
+            </li>
+          </ul>
+        </nav>
+      )}
+
+
     </Container>
   );
 }

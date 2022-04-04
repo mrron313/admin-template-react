@@ -69,31 +69,32 @@ export default function Login({ token, getToken }) {
   }, [token]);
    
   return(
-    <div className="Login">
+    <div className="main">
       <Form onSubmit={handleSubmit}>
+        <p className="sign" align="center">Sign in</p>
 
         <Alert show={show} variant="danger">
           <p> { message } </p>
         </Alert>
 
-        <Form.Group size="lg" controlId="email">
-          <Form.Label>Email</Form.Label>
+        <Form.Group size="lg" controlId="email" className="form1">
           <Form.Control
             autoFocus
             type="email"
+            className="un"
             value={username}
             onChange={e => setUserName(e.target.value)}
           />
         </Form.Group>
         <Form.Group size="lg" controlId="password">
-          <Form.Label>Password</Form.Label>
           <Form.Control
+            className="pass" 
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button className='mt-2' block size="lg" type="submit" disabled={!validateForm() || loading}>
+        <Button className='mt-2 submit' block size="lg" type="submit" disabled={!validateForm() || loading}>
           { loading? 'Loading..' : 'Login' }
         </Button>
       </Form>
