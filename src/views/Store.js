@@ -12,6 +12,8 @@ import { putApiCall } from 'Helpers/api';
 
 export default function Store() {
   const history = useHistory();
+  const token = localStorage.getItem('token');
+
   let store_details = localStorage.getItem('store_details');
   store_details = JSON.parse(store_details);
   const [isLoading, setLoading] = useState(null);
@@ -27,7 +29,8 @@ export default function Store() {
     });
 
     var headers = { 
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     };
 
     putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_store', 'put', headers, data).then((result) => {
@@ -48,7 +51,7 @@ export default function Store() {
       </Row>
       <div className='store-item'>
         <CustomToast />
-        { store_details.store_status === 'pending' && (<Button disabled={isLoading !== null}  variant="light" onClick={() => approve(store_details.store_id)}> 
+        { store_details.store_status === 'pending' && (<Button variant="success" disabled={isLoading !== null} onClick={() => approve(store_details.store_id)}> 
           {isLoading === null? 'Approve' : 'Loading'}
         </Button> )}
         <JSONPretty 

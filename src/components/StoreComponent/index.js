@@ -137,6 +137,7 @@ function StoreComponent(props) {
     if (data.length === 0) return 'No stores found';
 
     return data.map(d => {
+      console.log(d);
       return (
         <div onClick={() => openStore(d)} style={{ cursor: 'pointer' }} className="store-item">
           <table class="table table-borderless">
@@ -156,17 +157,7 @@ function StoreComponent(props) {
                   <td scope="col">{`${d.store_owner_firstname} ${d.store_owner_lastname}`}</td>
                   <td>{d.store_phonenumber}</td>
                   <td>
-                    <h6 className="d-inline">
-                      <Badge pill bg={d.completion_information.menu ? 'success' : 'danger'} className="m-1">
-                        {d.completion_information.menu ? 
-                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
-                          : 
-                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
-                        }
-                        menu
-                      </Badge>
-                    </h6>
-                    <h6 className="d-inline">
+                    <p style={{ marginBottom: '0px' }}>
                       <Badge pill bg={d.completion_information.bank_account ? 'success' : 'danger'} className="m-1">
                         {d.completion_information.bank_account ? 
                           <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
@@ -175,8 +166,8 @@ function StoreComponent(props) {
                         }
                         bank account
                       </Badge>
-                    </h6>
-                    <h6 className="d-inline">
+                    </p>
+                    <p style={{ marginBottom: '0px' }}>
                       <Badge pill bg={d.completion_information.discount_and_commission ? 'success' : 'danger'} className="m-1">
                         {d.completion_information.discount_and_commission ? 
                           <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
@@ -185,38 +176,8 @@ function StoreComponent(props) {
                         }
                         discount and commission
                       </Badge>
-                    </h6>
-                    <h6 className="d-inline">
-                      <Badge pill bg={d.completion_information.opening_hours ? 'success' : 'danger'} className="m-1">
-                        {d.completion_information.opening_hours ? 
-                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
-                          : 
-                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
-                        }
-                        opening hours
-                      </Badge>
-                    </h6>
-                    <h6 className="d-inline">
-                      <Badge pill bg={d.completion_information.tax_rate ? 'success' : 'danger'} className="m-1">
-                        {d.completion_information.tax_rate ? 
-                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
-                          : 
-                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
-                        }
-                        tax rate
-                      </Badge>
-                    </h6>
-                    <h6 className="d-inline">
-                      <Badge pill bg={d.completion_information.timezone ? 'success' : 'danger'}  className="m-1">
-                        {d.completion_information.timezone ? 
-                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
-                          : 
-                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
-                        }
-                        timezone
-                      </Badge>
-                    </h6>
-                    <h6>
+                    </p>
+                    <p style={{ marginBottom: '0px' }}>
                       <Badge pill bg={d.completion_information.initial_login ? 'success' : 'danger'} className="m-1">
                         {d.completion_information.initial_login ? 
                           <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
@@ -225,7 +186,47 @@ function StoreComponent(props) {
                         }
                         initial login
                       </Badge>
-                    </h6>
+                    </p>
+                    <p style={{ marginBottom: '0px' }}>
+                      <Badge pill bg={d.completion_information.menu ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.menu ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        menu
+                      </Badge>
+                    </p>
+                    <p style={{ marginBottom: '0px' }}>
+                      <Badge pill bg={d.completion_information.opening_hours ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.opening_hours ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        opening hours
+                      </Badge>
+                    </p>
+                    <p style={{ marginBottom: '0px' }}>
+                      <Badge pill bg={d.completion_information.tax_rate ? 'success' : 'danger'} className="m-1">
+                        {d.completion_information.tax_rate ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        tax rate
+                      </Badge>
+                    </p>
+                    <p style={{ marginBottom: '0px' }}>
+                      <Badge pill bg={d.completion_information.timezone ? 'success' : 'danger'}  className="m-1">
+                        {d.completion_information.timezone ? 
+                          <AiOutlineCheck style={{ paddingRight: '5px', fontSize: '20px' }} />
+                          : 
+                          <GiCancel style={{ paddingRight: '5px', fontSize: '20px' }} />
+                        }
+                        timezone
+                      </Badge>
+                    </p>
                   </td>
                 </tr>
               </tbody>

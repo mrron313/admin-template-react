@@ -28,6 +28,7 @@ const options = {
 function Menu() {
   const history = useHistory();
   const [isLoading, setLoading] = useState(null);
+  const token = localStorage.getItem('token');
 
   let menu_details = localStorage.getItem('menu_details');
   menu_details = JSON.parse(menu_details);
@@ -203,7 +204,8 @@ function Menu() {
     });
 
     var headers = { 
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     };
 
     copyToClipboard(entering_id);
@@ -224,7 +226,8 @@ function Menu() {
     });
 
     var headers = { 
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     };
     
     copyToClipboard(entering_id);
