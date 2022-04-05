@@ -13,6 +13,8 @@ export const putApiCall = (url, method, headers, data) => {
     return response;
   })
   .catch(function (error) {
-    console.log(error);
+    if (error.status === 403) {
+      localStorage.removeItem('token');
+    }
   });
 }

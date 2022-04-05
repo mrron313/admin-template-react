@@ -1,16 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from 'react-router-dom';
 
 import "bootstrap/dist/css/bootstrap.css";
 
-import { Container, Row, Badge, Button, Form, Spinner } from "react-bootstrap";
-import Multiselect from 'multiselect-react-dropdown';
-import { useHistory } from 'react-router-dom';
+import { Container, Row, Badge, Button, Form, Spinner, Accordion } from "react-bootstrap";
+
+import { useAccordionButton } from 'react-bootstrap/AccordionButton';
+import AccordionContext from "react-bootstrap/AccordionContext";
 
 import { putApiCall } from "Helpers/api";
 
 const headers = { 
   'Content-Type': 'application/json'
 };
+
+function ContextAwareToggle({ children, eventKey, callback }) {
+  const { activeEventKey } = useContext(AccordionContext);
+
+  const decoratedOnClick = useAccordionButton(
+    eventKey,
+    () => callback && callback(eventKey),
+  );
+
+  const isCurrentEventKey = activeEventKey === eventKey;
+
+  console.log(activeEventKey);
+
+  return (
+    <Button
+      variant="primary"
+      onClick={decoratedOnClick}
+    >
+      {children}
+    </Button>
+  );
+}
 
 function OrderComponent(props) {
   const history = useHistory();
@@ -78,35 +102,63 @@ function OrderComponent(props) {
   const renderOrders = (data) => {
     if (data.length === 0) return 'No orders found';
 
-    return data.map(d => {
-      console.log(d);
-      return (
-        <div onClick={() => openOrder(d)} style={{ cursor: 'pointer' }} className="store-item">
-          <div>
-            <table class="table table-borderless">
-              <thead>
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Customer Name</th>
-                  <th scope="col">Store Name</th>
-                  <th scope="col">Customer Phone Number</th>
-                  <th scope="col">Total Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">{d.order_id}</th>
-                  <td>{d.customer_name}</td>
-                  <td>{d.store_name}</td>
-                  <td>{d.phonenumber}</td>
-                  <td>{d.total_amount}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      );
-    });
+    return (
+      <Accordion defaultActiveKey="0">
+      {
+        data.map((d, i) => {
+          console.log(d);
+          return (
+            <div style={{ cursor: 'pointer' }} className="store-item">
+              <div>
+                <table class="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Customer Name</th>
+                      <th scope="col">Store Name</th>
+                      <th scope="col">Customer Phone Number</th>
+                      <th scope="col">Total Amount</th>
+                      <th scope="col">Items</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">{d.order_id}</th>
+                      <td>{d.customer_name}</td>
+                      <td>{d.store_name}</td>
+                      <td>{d.phonenumber}</td>
+                      <td>{d.total_amount}</td>
+                      <td><ContextAwareToggle eventKey={i}>Display Items</ContextAwareToggle></td>
+                    </tr>
+                    <tr>
+                      <td colspan="6">
+                        <Accordion.Collapse eventKey={i}>
+                          <span>
+                            {d.items.map(item => (
+                              <>
+                                <p>ITEMS</p>
+                                <div style={{ cursor: 'pointer' }} className="store-item flex-div">
+                                  <span className="flex-div-a">{ item.item_name } (Qty: {item.item_qty}) </span> 
+                                  <span className="flex-div-b">${ item.item_price } </span> 
+                                </div>
+                              </>
+                            ))}
+                          </span>
+                        </Accordion.Collapse>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        })
+      }
+      </Accordion>
+    )
+    
+    
+
   }
 
   const openOrder = (order_details) => {
@@ -117,7 +169,6 @@ function OrderComponent(props) {
   return (
     <Container fluid>
       <div style={{ minHeight: '700px' }}>
-
         {loading === true && (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>

@@ -144,6 +144,7 @@ function StoreComponent(props) {
               <thead>
                 <tr>
                   <th width="15%" scope="col">Name</th>
+                  <th width="15%" scope="col">Code</th>
                   <th width="30%" scope="col">Address</th>
                   <th width="15%" scope="col">Owner</th>
                   <th width="15%" scope="col">Phone Number</th>
@@ -153,6 +154,7 @@ function StoreComponent(props) {
               <tbody>
                 <tr>
                   <th scope="row">{d.store_name}</th>
+                  <td>{d.store_code}</td>
                   <td>{d.store_address}</td>
                   <td scope="col">{`${d.store_owner_firstname} ${d.store_owner_lastname}`}</td>
                   <td>{d.store_phonenumber}</td>
