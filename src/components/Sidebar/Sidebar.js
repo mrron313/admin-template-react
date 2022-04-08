@@ -49,7 +49,7 @@ function Sidebar({ color, image, routes }) {
               />
             </div>
           </a>
-          <a className="simple-text" href="/">
+          <a className="simple-text" href="/admin/stores">
             Admin Site
           </a>
         </div>
