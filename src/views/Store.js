@@ -67,13 +67,13 @@ export default function Store() {
         </Button> )}
 
         <Button
-          variant='warning'
-          style={{ marginRight: '10px' }}
+          style={{ backgroundColor: '#515751', marginRight: '10px', border: 'none' }}
           onClick={() => openMenusForStore(store_details.menu_published_id, store_details.menu_draft_id)}
         >
           Menu
         </Button>
         <Button
+          style={{ backgroundColor: '#596869', marginRight: '10px', border: 'none' }}
           variant='secondary'
           onClick={() => openOrdersForStore(store_details.store_id)}
         >

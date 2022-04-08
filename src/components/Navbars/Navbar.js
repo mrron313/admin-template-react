@@ -44,8 +44,8 @@ function AdminNavbar() {
           <span className="navbar-toggler-bar burger-lines"></span>
           <span className="navbar-toggler-bar burger-lines"></span>
         </Navbar.Toggle>
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="nav mr-auto" navbar>
+        <Navbar.Collapse id="basic-navbar-nav" className="d-flex">
+          <Nav className="nav mr-auto flex-div-a" navbar style={{ width: '90%' }}>
             <Nav.Item>
               <Nav.Link
                 data-toggle="dropdown"
@@ -57,7 +57,7 @@ function AdminNavbar() {
               </Nav.Link>
             </Nav.Item>
           </Nav>
-          <Nav className="ml-auto" navbar>
+          <Nav className="ml-auto flex-div-b" navbar style={{ width: '8%' }}>
             <Nav.Item>
               <Nav.Link
                 className="m-0"
