@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import MenuComponent from '../components/MenuComponent/index.js'
+import UserComponent from '../../components/UserComponent/index.js'
 import { Tabs, Tab } from 'react-bootstrap'
 
 import {
@@ -8,28 +8,24 @@ import {
   Row,
 } from "react-bootstrap";
 
-function Menus() {
+function Users() {
   const [activeTab, setActiveTab] = useState(null);
 
   useEffect(() => {
-    let item = localStorage.getItem('activeTabMenus');
+    let item = localStorage.getItem('activeTabUsers');
 
     if (!item) setActiveTab(0); 
     else setActiveTab(item);
   }, []);
   
-  const menuTypes = [
+  const userTypes = [
     {
-      name: 'menus',
-      title: 'All Menus'
+      name: 'store_owners',
+      title: 'Store Owners'
     },
     {
-      name: 'assignableMenus',
-      title: 'Assignable Menus'
-    },
-    {
-      name: 'inReviewMenus',
-      title: 'In Review Menus'
+      name: 'marketers',
+      title: 'Marketers'
     },
   ];
 
@@ -40,15 +36,15 @@ function Menus() {
           id="controlled-tab-example"
           activeKey={activeTab}
           onSelect={(k) => {
-            localStorage.setItem('activeTabMenus', k);
+            localStorage.setItem('activeTabUsers', k);
             setActiveTab(k);
           }} 
           className="mb-3"
         >
-          {menuTypes.map((menu, i) => {
+          {userTypes.map((user, i) => {
             return (
-              <Tab eventKey={i} activeKey={activeTab} title={menu.title}>        
-                <MenuComponent activeTab={activeTab} />
+              <Tab eventKey={i} activeKey={activeTab} title={user.title}>        
+                <UserComponent activeTab={activeTab} />
               </Tab>
             );
           })}
@@ -58,4 +54,4 @@ function Menus() {
   );
 }
 
-export default Menus;
+export default Users;

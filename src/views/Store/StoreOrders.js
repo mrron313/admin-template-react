@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import StoreOrderComponent from '../components/OrderComponent/StoreOrders';
+import StoreOrderComponent from '../../components/OrderComponent/StoreOrders';
 
 import {
   Container,

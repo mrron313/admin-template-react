@@ -176,7 +176,7 @@ function StoreOrderComponent(props) {
       </Row>
 
       <Row>
-        <Col md={12} className="mt-2">
+        <Col md={12} className="mt-3">
           <div style={{ minHeight: '700px' }}>
             {loading === true && (
               <Spinner animation="border" role="status">

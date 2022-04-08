@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import AdminLayout from "layouts/Admin.js";
 
-import Login from './views/Login.js';
+import Login from './views/Login';
 
 export default function App() {
   const [token, setToken] = useState('');

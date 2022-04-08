@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { copyToClipboard } from 'Helpers/copy';
 import toast from 'react-hot-toast';
+
 
 import {
   Button,
@@ -9,12 +10,13 @@ import {
   Row,
   Col,
   Accordion,
-  Badge
+  Badge,
+  Spinner
 } from "react-bootstrap";
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import AccordionContext from "react-bootstrap/AccordionContext";
 import { BsFillArrowRightCircleFill, BsFillArrowDownCircleFill, BsChevronRight, BsChevronDown } from "react-icons/bs";
-import CustomToast from '../components/Notification/CustomToast';
+import CustomToast from '../../components/Notification/CustomToast';
 import { putApiCall } from 'Helpers/api';
 
 const options = {
@@ -25,15 +27,52 @@ const options = {
   'new': 'primary',
 };
 
+const headers = { 
+  'Content-Type': 'application/json'
+};
+
 function Menu() {
   const history = useHistory();
+  const location = useLocation();
+
+  const [pageLoading, setPageLoading] = useState(null);
   const [isLoading, setLoading] = useState(null);
   const token = localStorage.getItem('token');
 
-  let menu_details = localStorage.getItem('menu_details');
-  menu_details = JSON.parse(menu_details);
+  const [published_menu_details, setPublishedMenuDetails] = useState(null);
+  const [draft_menu_details, setDraftMenuDetails] = useState(null);
 
-  let renderCategories = () => 
+  useEffect(() => {
+    setPageLoading(true);
+  
+    const menu_published_id = localStorage.getItem('menu_published_id');
+    const menu_draft_id = localStorage.getItem('menu_draft_id');
+
+    let data = {
+      "menu_published_id": menu_published_id,
+      "menu_draft_id": menu_draft_id,
+    }
+
+    data = JSON.stringify(data);
+    let url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/fetch_menus_by_store';
+
+    headers.Authorization = `Bearer ${token}`; 
+
+    putApiCall(url, 'put', headers, data).then((result) => {
+      console.log(result.data);
+      if (result.data) {
+        setPublishedMenuDetails(result.data.published_menu);
+        setDraftMenuDetails(result.data.draft_menu);
+        setPageLoading(false);
+      } else {
+        setPageLoading(false);
+        setPublishedMenuDetails({});
+        setDraftMenuDetails({});
+      }
+    });
+  }, []);
+  
+  let renderCategories = (menu_details) => 
     menu_details.categories.map((category, i) => {
       function CustomToggle({ children, eventKey, callback }) {
         const { activeEventKey } = useContext(AccordionContext);
@@ -197,6 +236,14 @@ function Menu() {
       );
     });
 
+  const goBack = () => {
+    history.push('/admin/store');
+  }
+
+  const goToURL = (url) => {
+    window.open(`http://${url}`, "_blank")
+  }
+
   const approve = (menu_draft_id, entering_id) => {
     setLoading(true);
     var data = JSON.stringify({
@@ -241,56 +288,101 @@ function Menu() {
     });
   }
 
-  const goBack = () => {
-    history.push('/admin/menus');
-  }
-
-  const goToURL = (url) => {
-    window.open(`http://${url}`, "_blank")
-  }
-
   return (
     <>
       <CustomToast />
       <Row>
-        <Col md="3" className="offset-md-1 mb-3">
-          <Button onClick={goBack}>Go Back to Menus</Button>
+        <Col md="12" className="mb-3">
+          <Button onClick={goBack}>Go Back to the Store</Button>
+        </Col>
+
+        <Col md="12" className="mt-3">
+          {pageLoading === true && (
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          )}
         </Col>
       </Row>
-      <Row>
-        <Col md="10" className="offset-md-1">
-          <Card className="card-user">
-            <Card.Header>
-              <h5 className="h6 flex-div">
-                <span style={{ width: '40%' }} className='flex-div-a'>
-                  CATEGORIES 
-                  <Badge style={{ marginLeft: '5px' }} className='badge rounded-pill' bg={options[menu_details.menu_process]}>{menu_details.menu_process}</Badge> 
-                </span>
 
-                <span style={{ width: '30%' }}>
-                  <Badge onClick={() => goToURL(menu_details.entering_url)} style={{ cursor: 'pointer' }} size='sm'>url</Badge>
-                </span>
-                
-                <div style={{ width: '10%', textAlign: 'right' }} className='flex-div-b'>
-                  { menu_details.menu_process === 'assignable'? 
-                    <Button disabled={isLoading !== null}  variant="light" onClick={() => assign(menu_details.menu_draft_id, menu_details.entering_id)}> 
-                      {isLoading === null? 'Assign' : 'Loading'}
-                    </Button> : '' }
+      {pageLoading === false && (
+        <Row>
+          <Col md="12">
+            <Accordion>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>Published Menu</Accordion.Header>
+                <Accordion.Body>
+                    <Card className="card-user">
+                      <Card.Header>
+                        <h5 className="h6 flex-div">
+                          <span style={{ width: '40%' }} className='flex-div-a'>
+                            CATEGORIES 
+                            <Badge style={{ marginLeft: '5px' }} className='badge rounded-pill' bg={options[published_menu_details.menu_process]}>{published_menu_details.menu_process}</Badge> 
+                          </span>
 
-                  { menu_details.menu_process  === 'in_review'? 
-                    <Button disabled={isLoading !== null} variant="light" onClick={() => approve(menu_details.menu_draft_id, menu_details.entering_id)}> 
-                      {isLoading === null? 'Approve' : 'Loading'}
-                    </Button> : '' }
-                </div>
-              </h5>
-            </Card.Header>
-            <hr></hr>
-            <Card.Body>
-              {menu_details.categories.length === 0? 'No Categories Found' : renderCategories()}  
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+                          <span style={{ width: '30%' }}>
+                            <Badge onClick={() => goToURL(published_menu_details.entering_url)} style={{ cursor: 'pointer' }} size='sm'>url</Badge>
+                          </span>
+
+                          <div style={{ width: '10%', textAlign: 'right' }} className='flex-div-b'>
+                            { published_menu_details.menu_process === 'assignable'? 
+                              <Button disabled={isLoading !== null}  variant="light" onClick={() => assign(published_menu_details.menu_draft_id, published_menu_details.entering_id)}> 
+                                {isLoading === null? 'Assign' : 'Loading'}
+                              </Button> : '' }
+
+                            { published_menu_details.menu_process  === 'in_review'? 
+                              <Button disabled={isLoading !== null} variant="light" onClick={() => approve(published_menu_details.menu_draft_id, published_menu_details.entering_id)}> 
+                                {isLoading === null? 'Approve' : 'Loading'}
+                              </Button> : '' }
+                          </div>
+                        </h5>
+                      </Card.Header>
+                      <hr></hr>
+                      <Card.Body>
+                        {published_menu_details.categories.length === 0? 'No Categories Found' : renderCategories(published_menu_details)}  
+                      </Card.Body>
+                    </Card>
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="1">
+                <Accordion.Header>Draft Menu</Accordion.Header>
+                <Accordion.Body>
+                  <Card className="card-user">
+                    <Card.Header>
+                      <h5 className="h6 flex-div">
+                        <span style={{ width: '40%' }} className='flex-div-a'>
+                          CATEGORIES - Draft Menu
+                          <Badge style={{ marginLeft: '5px' }} className='badge rounded-pill' bg={options[draft_menu_details.menu_process]}>{draft_menu_details.menu_process}</Badge> 
+                        </span>
+
+                        <span style={{ width: '30%' }}>
+                          <Badge onClick={() => goToURL(draft_menu_details.entering_url)} style={{ cursor: 'pointer' }} size='sm'>url</Badge>
+                        </span>
+
+                        <div style={{ width: '10%', textAlign: 'right' }} className='flex-div-b'>
+                          { draft_menu_details.menu_process === 'assignable'? 
+                            <Button disabled={isLoading !== null}  variant="light" onClick={() => assign(draft_menu_details.menu_draft_id, draft_menu_details.entering_id)}> 
+                              {isLoading === null? 'Assign' : 'Loading'}
+                            </Button> : '' }
+
+                          { draft_menu_details.menu_process  === 'in_review'? 
+                            <Button disabled={isLoading !== null} variant="light" onClick={() => approve(draft_menu_details.menu_draft_id, draft_menu_details.entering_id)}> 
+                              {isLoading === null? 'Approve' : 'Loading'}
+                            </Button> : '' }
+                        </div>
+                      </h5>
+                    </Card.Header>
+                    <hr></hr>
+                    <Card.Body>
+                      {draft_menu_details.categories.length === 0? 'No Categories Found' : renderCategories(draft_menu_details)}  
+                    </Card.Body>
+                  </Card>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </Col>
+        </Row>
+      )}
     </>
   );
 }

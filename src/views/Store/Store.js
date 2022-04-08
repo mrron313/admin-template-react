@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import JSONPretty from 'react-json-pretty';
-import CustomToast from '../components/Notification/CustomToast';
+import CustomToast from '../../components/Notification/CustomToast';
 import toast from 'react-hot-toast';
 import {   
   Button,

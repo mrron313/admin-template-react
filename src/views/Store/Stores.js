@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import UserComponent from '../components/UserComponent/index.js'
+import StoreComponent from '../../components/StoreComponent/index.js'
 import { Tabs, Tab } from 'react-bootstrap'
 
 import {
@@ -8,11 +8,11 @@ import {
   Row,
 } from "react-bootstrap";
 
-function Users() {
+function Stores() {
   const [activeTab, setActiveTab] = useState(null);
 
   useEffect(() => {
-    let item = localStorage.getItem('activeTabUsers');
+    let item = localStorage.getItem('activeTabStores');
 
     if (!item) setActiveTab(0); 
     else setActiveTab(item);
@@ -20,12 +20,12 @@ function Users() {
   
   const userTypes = [
     {
-      name: 'store_owners',
-      title: 'Store Owners'
+      name: 'all_stores',
+      title: 'All Stores'
     },
     {
-      name: 'marketers',
-      title: 'Marketers'
+      name: 'pending_stores',
+      title: 'Pending Stores'
     },
   ];
 
@@ -36,7 +36,7 @@ function Users() {
           id="controlled-tab-example"
           activeKey={activeTab}
           onSelect={(k) => {
-            localStorage.setItem('activeTabUsers', k);
+            localStorage.setItem('activeTabStores', k);
             setActiveTab(k);
           }} 
           className="mb-3"
@@ -44,7 +44,7 @@ function Users() {
           {userTypes.map((user, i) => {
             return (
               <Tab eventKey={i} activeKey={activeTab} title={user.title}>        
-                <UserComponent activeTab={activeTab} />
+                <StoreComponent activeTab={activeTab} />
               </Tab>
             );
           })}
@@ -54,4 +54,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default Stores;
