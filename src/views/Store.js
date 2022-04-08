@@ -18,10 +18,6 @@ export default function Store() {
   store_details = JSON.parse(store_details);
   const [isLoading, setLoading] = useState(null);
 
-  const goBack = () => {
-    history.push('/admin/stores');
-  }
-
   const approve = (store_id) => {
     setLoading(true);
     var data = JSON.stringify({
@@ -40,7 +36,22 @@ export default function Store() {
         goBack();
       }, 2000);
     });
-  }
+  };
+
+  const openOrdersForStore = (store_id) => {
+    localStorage.setItem('store_id', store_id);
+    history.push('/admin/store/orders');
+  };
+
+  const openMenusForStore = (menu_published_id, menu_draft_id) => {
+    localStorage.setItem('menu_published_id', menu_published_id);
+    localStorage.setItem('menu_draft_id', menu_draft_id);
+    history.push('/admin/store/menu');
+  };
+
+  const goBack = () => {
+    history.push('/admin/stores');
+  };
 
   return (
     <>
@@ -54,6 +65,20 @@ export default function Store() {
         { store_details.store_status === 'pending' && (<Button variant="success" disabled={isLoading !== null} onClick={() => approve(store_details.store_id)}> 
           {isLoading === null? 'Approve' : 'Loading'}
         </Button> )}
+
+        <Button
+          variant='warning'
+          style={{ marginRight: '10px' }}
+          onClick={() => openMenusForStore(store_details.menu_published_id, store_details.menu_draft_id)}
+        >
+          Menu
+        </Button>
+        <Button
+          variant='secondary'
+          onClick={() => openOrdersForStore(store_details.store_id)}
+        >
+          Orders
+        </Button>
         <JSONPretty 
           id="json-pretty" 
           data={store_details} 

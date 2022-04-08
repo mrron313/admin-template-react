@@ -1,11 +1,12 @@
-import Dashboard from 'views/Dashboard.js';
 import Menus from 'views/Menus.js';
 import Menu from 'views/Menu.js';
+import StoreMenu from 'views/StoreMenu';
 
 import Users from 'views/Users.js'
 import User from 'views/User.js'
 
 import Order from 'views/Order.js'
+import StoreOrders from 'views/StoreOrders';
 import Orders from 'views/Orders';
 
 import Store from 'views/Store.js'
@@ -19,6 +20,20 @@ const dashboardRoutes = [
     name: "Stores",
     component: Stores,
     sidebar: true,
+    layout: "/admin",
+  },
+  {
+    path: "/store/orders",
+    name: "Store Orders",
+    component: StoreOrders,
+    sidebar: false,
+    layout: "/admin",
+  },
+  {
+    path: "/store/menu",
+    name: "Menu",
+    component: StoreMenu,
+    sidebar: false,
     layout: "/admin",
   },
   {

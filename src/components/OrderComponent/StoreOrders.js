@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
 
-import "bootstrap/dist/css/bootstrap.css";
-
-import { Container, Row, Badge, Button, Form, Spinner, Accordion } from "react-bootstrap";
-
+import { Container, Row, Col, Button, Form, Spinner, Accordion } from "react-bootstrap";
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import AccordionContext from "react-bootstrap/AccordionContext";
 
 import { putApiCall } from "Helpers/api";
+
+import "bootstrap/dist/css/bootstrap.css";
 
 const headers = { 
   'Content-Type': 'application/json'
@@ -36,9 +35,10 @@ function ContextAwareToggle({ children, eventKey, callback }) {
   );
 }
 
-function OrderComponent(props) {
+function StoreOrderComponent(props) {
   const history = useHistory();
   const token = localStorage.getItem('token');
+  const store_id = localStorage.getItem('store_id');
 
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
@@ -74,11 +74,11 @@ function OrderComponent(props) {
     let data, url;
 
     data = {
-      "date_created": type === 'next'? dateCreatedNext : type === 'prev'? prevs[p] : null,
+      "store_id": store_id,
     }
 
     data = JSON.stringify(data);
-    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_orders';
+    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/fetch_orders_from_store';
 
     headers.Authorization = `Bearer ${token}`; 
 
@@ -108,7 +108,7 @@ function OrderComponent(props) {
         data.map((d, i) => {
           console.log(d);
           return (
-            <div onClick={() => openOrder(d)} style={{ cursor: 'pointer' }} className="store-item">
+            <div onClick={openOrder} style={{ cursor: 'pointer' }} className="store-item">
               <div>
                 <table class="table table-borderless">
                   <thead>
@@ -163,31 +163,46 @@ function OrderComponent(props) {
     history.push("/admin/order");
   };
 
+  const goBack = () => {
+    history.push('/admin/store');
+  };
+
   return (
     <Container fluid>
-      <div style={{ minHeight: '700px' }}>
-        {loading === true && (
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
-        {loading === false && 
-          renderOrders(orders) 
-        }
-      </div>
+      <Row>
+        <Col md="3">
+          <Button onClick={goBack}>Go Back to the Store</Button>
+        </Col>
+      </Row>
 
-      <nav aria-label="Page navigation example">
-        <ul className="pagination justify-content-center">
-          <li className="page-item">
-            <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
-          </li>
-          <li className="page-item">
-            <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
-          </li>
-        </ul>
-      </nav>
+      <Row>
+        <Col md={12} className="mt-2">
+          <div style={{ minHeight: '700px' }}>
+            {loading === true && (
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            )}
+            {loading === false && 
+              renderOrders(orders) 
+            }
+          </div>
+
+          <nav aria-label="Page navigation example">
+            <ul className="pagination justify-content-center">
+              <li className="page-item">
+                <a className="page-link"  role="button" tabindex="-1" onClick={handleOnClickPrev}>Previous</a>
+              </li>
+              <li className="page-item">
+                <span className="page-link" role="button" onClick={handleOnClickNext}>Next</span>
+              </li>
+            </ul>
+          </nav>
+        </Col>
+      </Row>
+
     </Container>
   );
 }
 
-export default OrderComponent;
+export default StoreOrderComponent;
