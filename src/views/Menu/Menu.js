@@ -75,8 +75,6 @@ function Menu() {
 
   let renderItems = (items) => 
     items.map((item, i) => {
-      console.log(item);
-
       function CustomToggle({ children, eventKey, callback }) {
         const { activeEventKey } = useContext(AccordionContext);
 

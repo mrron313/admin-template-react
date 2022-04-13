@@ -24,8 +24,6 @@ function ContextAwareToggle({ children, eventKey, callback }) {
 
   const isCurrentEventKey = activeEventKey === eventKey;
 
-  console.log(activeEventKey);
-
   return (
     <Button
       variant="primary"

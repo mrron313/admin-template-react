@@ -59,7 +59,6 @@ function Menu() {
     headers.Authorization = `Bearer ${token}`; 
 
     putApiCall(url, 'put', headers, data).then((result) => {
-      console.log(result.data);
       if (result.data) {
         setPublishedMenuDetails(result.data.published_menu);
         setDraftMenuDetails(result.data.draft_menu);
@@ -114,8 +113,6 @@ function Menu() {
 
   let renderItems = (items) => 
     items.map((item, i) => {
-      console.log(item);
-
       function CustomToggle({ children, eventKey, callback }) {
         const { activeEventKey } = useContext(AccordionContext);
 

@@ -106,7 +106,6 @@ function MenuComponent(props) {
       url = 'get_assignable_menus';
       data = JSON.stringify(data);
     } else if (activeTab == 2) {
-      console.log(activeTab);
       url = 'get_submitted_menus';
       data = JSON.stringify(data);
     }

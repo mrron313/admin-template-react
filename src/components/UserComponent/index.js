@@ -135,7 +135,6 @@ function UserComponent(props) {
     if (data.length === 0) return 'No users found';
 
     return data.map(d => {
-      console.log(d);
       return (
         <div onClick={() => openMenu(d)} style={{ cursor: 'pointer' }} className="store-item">
           <div>

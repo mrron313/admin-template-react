@@ -137,7 +137,6 @@ function StoreComponent(props) {
     if (data.length === 0) return 'No stores found';
 
     return data.map(d => {
-      console.log(d);
       return (
         <div onClick={() => openStore(d)} style={{ cursor: 'pointer' }} className="store-item">
           <table class="table table-borderless">
