@@ -108,11 +108,11 @@ function OrderComponent(props) {
         data.map((d, i) => {
           console.log(d);
           return (
-            <div onClick={() => openOrder(d)} style={{ cursor: 'pointer' }} className="store-item">
+            <div style={{ cursor: 'pointer' }} className="order-item">
               <div>
-                <table class="table table-borderless">
+                <table class="table table-borderless" style={{ marginBottom: '0px' }}>
                   <thead>
-                    <tr>
+                    <tr onClick={() => openOrder(d)} >
                       <th scope="col">ID</th>
                       <th scope="col">Customer Name</th>
                       <th scope="col">Store Name</th>
@@ -123,11 +123,11 @@ function OrderComponent(props) {
                   </thead>
                   <tbody>
                     <tr>
-                      <th scope="row">{d.order_id}</th>
-                      <td>{d.customer_name}</td>
-                      <td>{d.store_name}</td>
-                      <td>{d.phonenumber}</td>
-                      <td>{d.total_amount}</td>
+                      <th onClick={() => openOrder(d)}  scope="row">{d.order_id}</th>
+                      <td onClick={() => openOrder(d)} >{d.customer_name}</td>
+                      <td onClick={() => openOrder(d)} >{d.store_name}</td>
+                      <td onClick={() => openOrder(d)} >{d.phonenumber}</td>
+                      <td onClick={() => openOrder(d)} >{d.total_amount}</td>
                       <td><ContextAwareToggle eventKey={i}>Display Items</ContextAwareToggle></td>
                     </tr>
                     <tr>
