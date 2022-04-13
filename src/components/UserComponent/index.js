@@ -55,7 +55,7 @@ function UserComponent(props) {
       "date_created": type === 'next'? dateCreatedNextForStoreOwner : type === 'prev'? prevs[p] : null,
     }
     
-    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_store_owners';
+    url = 'get_store_owners';
     data = JSON.stringify(data);
 
     headers.Authorization = `Bearer ${token}`; 
@@ -102,7 +102,7 @@ function UserComponent(props) {
       "date_created": type === 'next'? dateCreatedNextForMarketers : type === 'prev'? prevs[p] : null,
     };
 
-    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_marketers';
+    url = 'get_marketers';
     data = JSON.stringify(data);
 
     headers.Authorization = `Bearer ${token}`; 

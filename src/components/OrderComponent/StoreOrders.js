@@ -78,7 +78,7 @@ function StoreOrderComponent(props) {
     }
 
     data = JSON.stringify(data);
-    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/fetch_orders_from_store';
+    url = 'fetch_orders_from_store';
 
     headers.Authorization = `Bearer ${token}`; 
 

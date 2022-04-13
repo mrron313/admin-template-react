@@ -54,7 +54,7 @@ function Menu() {
     }
 
     data = JSON.stringify(data);
-    let url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/fetch_menus_by_store';
+    let url = 'fetch_menus_by_store';
 
     headers.Authorization = `Bearer ${token}`; 
 
@@ -257,7 +257,7 @@ function Menu() {
 
     copyToClipboard(entering_id);
 
-    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_menu', 'put', headers, data).then((result) => {
+    putApiCall('approve_menu', 'put', headers, data).then((result) => {
       setLoading(false);
       toast.success('The menu is approved');
       setTimeout(() => {
@@ -279,7 +279,7 @@ function Menu() {
     
     copyToClipboard(entering_id);
 
-    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/assign_menu', 'put', headers, data).then((result) => {
+    putApiCall('assign_menu', 'put', headers, data).then((result) => {
       setLoading(false);
       toast.success('The menu is assigned');
       setTimeout(() => {

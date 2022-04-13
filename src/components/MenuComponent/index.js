@@ -72,9 +72,9 @@ function MenuComponent(props) {
 
     if (selectedValues.length === 5) {
       data = JSON.stringify(data);
-      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_menus';
+      url = 'get_all_menus';
     } else {
-      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/filter_menu';
+      url = 'filter_menu';
       data.statuses = selectedValues;
       data = JSON.stringify(data);
     }
@@ -103,11 +103,11 @@ function MenuComponent(props) {
     };
 
     if (activeTab == 1) {
-      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_assignable_menus';
+      url = 'get_assignable_menus';
       data = JSON.stringify(data);
     } else if (activeTab == 2) {
       console.log(activeTab);
-      url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_submitted_menus';
+      url = 'get_submitted_menus';
       data = JSON.stringify(data);
     }
 

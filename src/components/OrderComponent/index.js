@@ -78,7 +78,7 @@ function OrderComponent(props) {
     }
 
     data = JSON.stringify(data);
-    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_orders';
+    url = 'get_all_orders';
 
     headers.Authorization = `Bearer ${token}`; 
 

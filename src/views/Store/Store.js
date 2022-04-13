@@ -29,7 +29,7 @@ export default function Store() {
       'Authorization': `Bearer ${token}`,
     };
 
-    putApiCall('https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/approve_store', 'put', headers, data).then((result) => {
+    putApiCall('approve_store', 'put', headers, data).then((result) => {
       setLoading(false);
       toast.success('The store is approved');
       setTimeout(() => {

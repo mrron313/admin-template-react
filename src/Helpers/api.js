@@ -3,7 +3,7 @@ import axios from 'axios';
 export const putApiCall = (url, method, headers, data) => {
   var config = {
     method,
-    url,
+    url: 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/' + url,
     headers,
     data,
   };

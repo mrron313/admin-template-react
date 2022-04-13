@@ -57,7 +57,7 @@ function StoreComponent(props) {
       "date_created": type === 'next'? dateCreatedNextForStores : type === 'prev'? prevs[p] : null,
     }
     
-    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_all_stores';
+    url = 'get_all_stores';
     data = JSON.stringify(data);
 
     headers.Authorization = `Bearer ${token}`; 
@@ -104,7 +104,7 @@ function StoreComponent(props) {
       "date_created": type === 'next'? dateCreatedNextForPendingStores : type === 'prev'? prevs[p] : null,
     };
 
-    url = 'https://us-central1-links-app-d5366.cloudfunctions.net/control_panel/get_pending_stores';
+    url = 'get_pending_stores';
     data = JSON.stringify(data);
 
     headers.Authorization = `Bearer ${token}`; 
