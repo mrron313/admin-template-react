@@ -13,6 +13,7 @@ import Store from 'views/Store/Store'
 import Stores from 'views/Store/Stores';
 
 import Login from 'views/Login';
+import Leads from 'views/Leads';
 
 const dashboardRoutes = [
   {
@@ -83,6 +84,13 @@ const dashboardRoutes = [
     name: "User",
     component: User,
     sidebar: false,
+    layout: "/admin",
+  },
+  {
+    path: "/leads",
+    name: "Leads",
+    component: Leads,
+    sidebar: true,
     layout: "/admin",
   },
   {
